@@ -69,17 +69,69 @@ class _ChatPageState extends State<ChatPage> {
     _messageController.clear();
     _scrollToBottom();
 
-    // Simulate AI response
-    await Future.delayed(const Duration(seconds: 2));
+    // ハイブリッドAI応答生成（高速＋効率的）
+    try {
+      final response = await _generateHybridAIResponse(messageText);
 
-    final aiResponse = _generateAIResponse(messageText);
+      final aiResponse = ChatMessage(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        content: response,
+        type: MessageType.text,
+        timestamp: DateTime.now(),
+        isFromUser: false,
+        status: MessageStatus.delivered,
+      );
 
-    setState(() {
-      _messages.add(aiResponse);
-      _isTyping = false;
-    });
+      setState(() {
+        _messages.add(aiResponse);
+        _isTyping = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isTyping = false;
+      });
+      // エラーハンドリング
+    }
 
     _scrollToBottom();
+  }
+
+  // ハイブリッドAI応答生成
+  Future<String> _generateHybridAIResponse(String userMessage) async {
+    // 即座にローカル応答をチェック
+    final localResponse = _getLocalResponse(userMessage);
+    if (localResponse != null) {
+      // ローカル応答は即座に返す
+      return localResponse;
+    }
+
+    // 複雑な質問の場合のみ、必要に応じてAI APIを呼び出す
+    // （現在はまだシミュレーション）
+    await Future.delayed(const Duration(milliseconds: 800));
+    return _generateAIResponse(userMessage).content;
+  }
+
+  // ローカル応答生成（キーワードベース）
+  String? _getLocalResponse(String message) {
+    final lowerMessage = message.toLowerCase();
+
+    if (lowerMessage.contains('hello') || lowerMessage.contains('こんにちは')) {
+      return 'こんにちは！旅行プランニングのお手伝いをさせていただきます。どちらへのご旅行をお考えですか？';
+    }
+
+    if (lowerMessage.contains('ありがとう')) {
+      return 'どういたしまして！他にも何かご質問があれば、お気軽にお聞かせください。';
+    }
+
+    if (lowerMessage.contains('予算')) {
+      return 'ご予算に合わせたプランをご提案いたします。大体どのくらいの予算をお考えでしょうか？';
+    }
+
+    if (lowerMessage.contains('おすすめ')) {
+      return 'おすすめの場所をご紹介いたします！どのような体験がお好みですか？（文化体験、自然、グルメ、ショッピングなど）';
+    }
+
+    return null; // ローカル応答なし
   }
 
   ChatMessage _generateAIResponse(String userMessage) {

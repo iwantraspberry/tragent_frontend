@@ -18,14 +18,12 @@ void main() {
     final testApp = MaterialApp(
       title: 'Travel Agent AI',
       theme: AppTheme.lightTheme,
-      home: const Scaffold(
-        body: Center(child: Text('Test App')),
-      ),
+      home: const Scaffold(body: Center(child: Text('Test App'))),
     );
 
     // Build our test app
     await tester.pumpWidget(testApp);
-    
+
     // Verify that we can find the MaterialApp
     expect(find.byType(MaterialApp), findsOneWidget);
     expect(find.text('Test App'), findsOneWidget);
@@ -33,7 +31,7 @@ void main() {
 
   testWidgets('AuthProvider works correctly', (WidgetTester tester) async {
     late AuthProvider authProvider;
-    
+
     final testApp = MaterialApp(
       home: ChangeNotifierProvider<AuthProvider>(
         create: (context) {
@@ -56,18 +54,20 @@ void main() {
     );
 
     await tester.pumpWidget(testApp);
-    
+
     // Enable guest mode to test functionality
     authProvider.continueAsGuest();
     await tester.pump(); // Rebuild after state change
-    
+
     // Should now be in guest mode
     expect(find.text('Guest'), findsOneWidget);
     expect(find.text('User: Guest User'), findsOneWidget);
     expect(authProvider.isGuestMode, isTrue);
   });
 
-  testWidgets('App theme configuration is correct', (WidgetTester tester) async {
+  testWidgets('App theme configuration is correct', (
+    WidgetTester tester,
+  ) async {
     final testApp = MaterialApp(
       title: 'Travel Agent AI',
       theme: AppTheme.lightTheme,
@@ -76,7 +76,7 @@ void main() {
     );
 
     await tester.pumpWidget(testApp);
-    
+
     final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
     expect(materialApp.title, 'Travel Agent AI');
     expect(materialApp.theme, AppTheme.lightTheme);
@@ -86,7 +86,7 @@ void main() {
   testWidgets('Basic widget functionality', (WidgetTester tester) async {
     // Test a simple counter app to verify test environment
     int counter = 0;
-    
+
     final testApp = MaterialApp(
       home: StatefulBuilder(
         builder: (context, setState) {
@@ -106,14 +106,14 @@ void main() {
     );
 
     await tester.pumpWidget(testApp);
-    
+
     // Initial state
     expect(find.text('Counter: 0'), findsOneWidget);
-    
+
     // Tap button and check update
     await tester.tap(find.text('Increment'));
     await tester.pump();
-    
+
     expect(find.text('Counter: 1'), findsOneWidget);
   });
 }

@@ -18,7 +18,9 @@ class HomePage extends StatelessWidget {
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Notifications feature coming soon!')),
+                const SnackBar(
+                  content: Text('Notifications feature coming soon!'),
+                ),
               );
             },
           ),
@@ -47,10 +49,10 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildWelcomeSection(AuthProvider authProvider) {
-    final userName = authProvider.isGuestMode 
-        ? 'Guest' 
+    final userName = authProvider.isGuestMode
+        ? 'Guest'
         : authProvider.user?.name ?? 'Traveler';
-    
+
     return Builder(
       builder: (context) => Container(
         width: double.infinity,
@@ -72,13 +74,10 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              authProvider.isGuestMode 
+              authProvider.isGuestMode
                   ? 'Discover amazing travel destinations and plan your perfect trip!'
                   : 'Ready for your next adventure?',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.white70,
-              ),
+              style: const TextStyle(fontSize: 16, color: Colors.white70),
             ),
             if (authProvider.isGuestMode) ...[
               const SizedBox(height: 16),
@@ -103,10 +102,7 @@ class HomePage extends StatelessWidget {
       children: [
         const Text(
           'Quick Actions',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         Row(
@@ -140,7 +136,9 @@ class HomePage extends StatelessWidget {
                 subtitle: 'View plans',
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('My trips feature coming soon!')),
+                    const SnackBar(
+                      content: Text('My trips feature coming soon!'),
+                    ),
                   );
                 },
               ),
@@ -153,7 +151,9 @@ class HomePage extends StatelessWidget {
                 subtitle: 'Saved places',
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Favorites feature coming soon!')),
+                    const SnackBar(
+                      content: Text('Favorites feature coming soon!'),
+                    ),
                   );
                 },
               ),
@@ -213,10 +213,7 @@ class HomePage extends StatelessWidget {
           children: [
             const Text(
               'Recent Activities',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             TextButton(
               onPressed: () {
@@ -277,10 +274,7 @@ class HomePage extends StatelessWidget {
           children: [
             const Text(
               'Popular Destinations',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             TextButton(
               onPressed: () {
@@ -328,11 +322,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               child: const Center(
-                child: Icon(
-                  Icons.location_city,
-                  size: 40,
-                  color: Colors.white,
-                ),
+                child: Icon(Icons.location_city, size: 40, color: Colors.white),
               ),
             ),
             Padding(

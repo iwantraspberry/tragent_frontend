@@ -102,7 +102,9 @@ class _TravelHomePageState extends State<TravelHomePage> {
             icon: const Icon(Icons.add),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Create new trip feature coming soon!')),
+                const SnackBar(
+                  content: Text('Create new trip feature coming soon!'),
+                ),
               );
             },
           ),
