@@ -22,26 +22,14 @@ class ChatMessage {
     this.metadata,
   });
 
-  factory ChatMessage.fromJson(Map<String, dynamic> json) => 
+  factory ChatMessage.fromJson(Map<String, dynamic> json) =>
       _$ChatMessageFromJson(json);
   Map<String, dynamic> toJson() => _$ChatMessageToJson(this);
 }
 
-enum MessageType {
-  text,
-  travelPlan,
-  destination,
-  activity,
-  image,
-  location
-}
+enum MessageType { text, travelPlan, destination, activity, image, location }
 
-enum MessageStatus {
-  sending,
-  sent,
-  delivered,
-  error
-}
+enum MessageStatus { sending, sent, delivered, error }
 
 @JsonSerializable()
 class ChatSession {
@@ -61,7 +49,7 @@ class ChatSession {
     required this.isActive,
   });
 
-  factory ChatSession.fromJson(Map<String, dynamic> json) => 
+  factory ChatSession.fromJson(Map<String, dynamic> json) =>
       _$ChatSessionFromJson(json);
   Map<String, dynamic> toJson() => _$ChatSessionToJson(this);
 }

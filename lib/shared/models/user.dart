@@ -62,7 +62,7 @@ class UserPreferences {
     this.interests,
   });
 
-  factory UserPreferences.fromJson(Map<String, dynamic> json) => 
+  factory UserPreferences.fromJson(Map<String, dynamic> json) =>
       _$UserPreferencesFromJson(json);
   Map<String, dynamic> toJson() => _$UserPreferencesToJson(this);
 }

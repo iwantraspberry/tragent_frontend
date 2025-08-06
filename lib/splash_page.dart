@@ -31,21 +31,13 @@ class _SplashPageState extends State<SplashPage>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeIn,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
 
-    _scaleAnimation = Tween<double>(
-      begin: 0.5,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
+    );
 
     _animationController.forward();
   }
@@ -53,7 +45,7 @@ class _SplashPageState extends State<SplashPage>
   Future<void> _checkAuthAndNavigate() async {
     // Wait for animation to complete
     await Future.delayed(const Duration(seconds: 2));
-    
+
     if (!mounted) return;
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -61,12 +53,8 @@ class _SplashPageState extends State<SplashPage>
 
     if (!mounted) return;
 
-    // Navigate based on authentication status
-    if (authProvider.isAuthenticated) {
-      context.go(AppConstants.homeRoute);
-    } else {
-      context.go(AppConstants.loginRoute);
-    }
+    // Always navigate to home (guest mode is enabled by default)
+    context.go(AppConstants.homeRoute);
   }
 
   @override
@@ -79,9 +67,7 @@ class _SplashPageState extends State<SplashPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppTheme.primaryGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppTheme.primaryGradient),
         child: Center(
           child: AnimatedBuilder(
             animation: _animationController,
@@ -115,7 +101,7 @@ class _SplashPageState extends State<SplashPage>
                         ),
                       ),
                       const SizedBox(height: 32),
-                      
+
                       // App Name
                       const Text(
                         AppConstants.appName,
@@ -127,7 +113,7 @@ class _SplashPageState extends State<SplashPage>
                         ),
                       ),
                       const SizedBox(height: 16),
-                      
+
                       // Tagline
                       const Text(
                         'Your Intelligent Travel Companion',
@@ -138,13 +124,15 @@ class _SplashPageState extends State<SplashPage>
                         ),
                       ),
                       const SizedBox(height: 64),
-                      
+
                       // Loading indicator
                       const SizedBox(
                         width: 40,
                         height: 40,
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
                           strokeWidth: 3,
                         ),
                       ),

@@ -28,11 +28,14 @@ class ProfilePage extends StatelessWidget {
       body: Consumer<AuthProvider>(
         builder: (context, authProvider, child) {
           final user = authProvider.user;
-          
+          final isGuest = authProvider.isGuestMode;
+
           if (user == null) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (isGuest) {
+            return _buildGuestProfileView(context, authProvider);
           }
 
           return SingleChildScrollView(
@@ -51,6 +54,158 @@ class ProfilePage extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildGuestProfileView(
+    BuildContext context,
+    AuthProvider authProvider,
+  ) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(AppConstants.defaultPadding),
+      child: Column(
+        children: [
+          _buildGuestHeader(context),
+          const SizedBox(height: 32),
+          _buildSignInPrompt(context),
+          const SizedBox(height: 32),
+          _buildBasicMenuSection(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGuestHeader(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: AppTheme.primaryGradient,
+        borderRadius: BorderRadius.circular(AppConstants.defaultBorderRadius),
+      ),
+      child: Column(
+        children: [
+          const CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.white,
+            child: Icon(
+              Icons.person_outline,
+              size: 50,
+              color: AppTheme.primaryColor,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Guest User',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Exploring in guest mode',
+            style: TextStyle(fontSize: 16, color: Colors.white70),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => context.go('/login'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppTheme.primaryColor,
+                  ),
+                  child: const Text('Sign In'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.go('/register'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    side: const BorderSide(color: Colors.white),
+                  ),
+                  child: const Text('Sign Up'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSignInPrompt(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const Icon(Icons.login, size: 48, color: AppTheme.primaryColor),
+            const SizedBox(height: 16),
+            const Text(
+              'Sign in to unlock all features',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              '• Save your travel plans\n• Get personalized recommendations\n• Access travel history\n• Sync across devices',
+              style: TextStyle(color: AppTheme.textSecondaryColor, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => context.go('/login'),
+              child: const Text('Get Started'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBasicMenuSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'App Settings',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        _buildMenuItem(
+          icon: Icons.language,
+          title: 'Language & Region',
+          subtitle: 'Change app language and currency',
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Language settings feature coming soon!'),
+              ),
+            );
+          },
+        ),
+        _buildMenuItem(
+          icon: Icons.help,
+          title: 'Help & Support',
+          subtitle: 'Get help and contact support',
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Help feature coming soon!')),
+            );
+          },
+        ),
+        _buildMenuItem(
+          icon: Icons.info,
+          title: 'About',
+          subtitle: 'App version and information',
+          onTap: () {
+            _showAboutDialog(context);
+          },
+        ),
+      ],
     );
   }
 
@@ -106,17 +261,16 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             user.email,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.white70,
-            ),
+            style: const TextStyle(fontSize: 16, color: Colors.white70),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
               // TODO: Navigate to edit profile
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Edit profile feature coming soon!')),
+                const SnackBar(
+                  content: Text('Edit profile feature coming soon!'),
+                ),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -179,10 +333,7 @@ class ProfilePage extends StatelessWidget {
       children: [
         const Text(
           'Travel Management',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         _buildMenuItem(
@@ -227,10 +378,7 @@ class ProfilePage extends StatelessWidget {
       children: [
         const Text(
           'Account',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         _buildMenuItem(
@@ -274,12 +422,19 @@ class ProfilePage extends StatelessWidget {
           },
         ),
         const SizedBox(height: 24),
-        _buildMenuItem(
-          icon: Icons.logout,
-          title: 'Sign Out',
-          subtitle: 'Sign out of your account',
-          isDestructive: true,
-          onTap: () => _showLogoutDialog(context, authProvider),
+        Consumer<AuthProvider>(
+          builder: (context, authProvider, child) {
+            if (authProvider.isGuestMode) {
+              return const SizedBox.shrink(); // Hide sign out for guest users
+            }
+            return _buildMenuItem(
+              icon: Icons.logout,
+              title: 'Sign Out',
+              subtitle: 'Sign out and continue as guest',
+              isDestructive: true,
+              onTap: () => _showLogoutDialog(context, authProvider),
+            );
+          },
         ),
       ],
     );
@@ -336,7 +491,9 @@ class ProfilePage extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Sign Out'),
-        content: const Text('Are you sure you want to sign out?'),
+        content: const Text(
+          'Are you sure you want to sign out? You can continue using the app as a guest.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -346,9 +503,7 @@ class ProfilePage extends StatelessWidget {
             onPressed: () async {
               Navigator.of(context).pop();
               await authProvider.logout();
-              if (context.mounted) {
-                context.go(AppConstants.loginRoute);
-              }
+              // Stay on the same page, just switch to guest mode
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.errorColor,

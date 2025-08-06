@@ -30,7 +30,7 @@ class TravelPlan {
     required this.updatedAt,
   });
 
-  factory TravelPlan.fromJson(Map<String, dynamic> json) => 
+  factory TravelPlan.fromJson(Map<String, dynamic> json) =>
       _$TravelPlanFromJson(json);
   Map<String, dynamic> toJson() => _$TravelPlanToJson(this);
 }
@@ -57,7 +57,7 @@ class TravelActivity {
     required this.isBooked,
   });
 
-  factory TravelActivity.fromJson(Map<String, dynamic> json) => 
+  factory TravelActivity.fromJson(Map<String, dynamic> json) =>
       _$TravelActivityFromJson(json);
   Map<String, dynamic> toJson() => _$TravelActivityToJson(this);
 }
@@ -86,7 +86,7 @@ class TravelDestination {
     this.timezone,
   });
 
-  factory TravelDestination.fromJson(Map<String, dynamic> json) => 
+  factory TravelDestination.fromJson(Map<String, dynamic> json) =>
       _$TravelDestinationFromJson(json);
   Map<String, dynamic> toJson() => _$TravelDestinationToJson(this);
 }

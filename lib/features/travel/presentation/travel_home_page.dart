@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import '../../../shared/services/auth_provider.dart';
 import '../../../shared/models/travel_plan.dart';
 import '../../../core/theme/app_theme.dart';
@@ -43,7 +44,8 @@ class _TravelHomePageState extends State<TravelHomePage> {
         id: '1',
         name: 'Tokyo',
         country: 'Japan',
-        description: 'A bustling metropolis with modern technology and ancient traditions.',
+        description:
+            'A bustling metropolis with modern technology and ancient traditions.',
         imageUrl: null,
         rating: 4.8,
         tags: ['Culture', 'Technology', 'Food'],
@@ -86,12 +88,22 @@ class _TravelHomePageState extends State<TravelHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Travel Home'),
+        title: const Text('Travel Planning'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined),
+            icon: const Icon(Icons.map_outlined),
             onPressed: () {
-              // TODO: Show notifications
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Map view feature coming soon!')),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Create new trip feature coming soon!')),
+              );
             },
           ),
         ],
@@ -134,17 +146,53 @@ class _TravelHomePageState extends State<TravelHomePage> {
     return Consumer<AuthProvider>(
       builder: (context, authProvider, child) {
         final userName = authProvider.user?.name ?? 'Traveler';
+        final isGuest = authProvider.isGuestMode;
+
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: AppTheme.primaryGradient,
-            borderRadius: BorderRadius.circular(AppConstants.defaultBorderRadius),
+            borderRadius: BorderRadius.circular(
+              AppConstants.defaultBorderRadius,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (isGuest) ...[
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.person_outline,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      'Guest Mode',
+                      style: TextStyle(fontSize: 14, color: Colors.white70),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () => context.go('/login'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.white.withOpacity(0.2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                      ),
+                      child: const Text('Sign In'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+              ],
               Text(
-                'Welcome back, $userName!',
+                isGuest
+                    ? 'Plan Your Perfect Trip!'
+                    : 'Ready to plan your next adventure, $userName?',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -152,14 +200,42 @@ class _TravelHomePageState extends State<TravelHomePage> {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Where would you like to go next?',
-                style: TextStyle(
+              Text(
+                isGuest
+                    ? 'Discover amazing destinations, create detailed itineraries, and get AI-powered travel recommendations!'
+                    : 'Where would you like to go next?',
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                   fontWeight: FontWeight.w300,
                 ),
               ),
+              if (isGuest) ...[
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.info_outline,
+                        color: Colors.white70,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Text(
+                          'Sign in to save your plans and get personalized recommendations',
+                          style: TextStyle(fontSize: 12, color: Colors.white70),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ],
           ),
         );
@@ -182,9 +258,9 @@ class _TravelHomePageState extends State<TravelHomePage> {
       ),
       onSubmitted: (query) {
         // TODO: Implement search
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Searching for: $query')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Searching for: $query')));
       },
     );
   }
@@ -195,10 +271,7 @@ class _TravelHomePageState extends State<TravelHomePage> {
       children: [
         const Text(
           'Quick Actions',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         Row(
@@ -278,10 +351,7 @@ class _TravelHomePageState extends State<TravelHomePage> {
           children: [
             const Text(
               'Popular Destinations',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             TextButton(
               onPressed: () {
@@ -359,7 +429,11 @@ class _TravelHomePageState extends State<TravelHomePage> {
                       if (destination.rating != null)
                         Row(
                           children: [
-                            const Icon(Icons.star, size: 12, color: Colors.amber),
+                            const Icon(
+                              Icons.star,
+                              size: 12,
+                              color: Colors.amber,
+                            ),
                             const SizedBox(width: 2),
                             Text(
                               destination.rating!.toStringAsFixed(1),
@@ -387,10 +461,7 @@ class _TravelHomePageState extends State<TravelHomePage> {
           children: [
             const Text(
               'Recent Plans',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             TextButton(
               onPressed: () {
@@ -406,7 +477,9 @@ class _TravelHomePageState extends State<TravelHomePage> {
             child: Padding(
               padding: EdgeInsets.all(20),
               child: Center(
-                child: Text('No travel plans yet. Start planning your first trip!'),
+                child: Text(
+                  'No travel plans yet. Start planning your first trip!',
+                ),
               ),
             ),
           )
@@ -450,7 +523,10 @@ class _TravelHomePageState extends State<TravelHomePage> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: _getStatusColor(plan.status),
                       borderRadius: BorderRadius.circular(12),
@@ -469,9 +545,7 @@ class _TravelHomePageState extends State<TravelHomePage> {
               const SizedBox(height: 8),
               Text(
                 plan.destination,
-                style: const TextStyle(
-                  color: AppTheme.textSecondaryColor,
-                ),
+                style: const TextStyle(color: AppTheme.textSecondaryColor),
               ),
               const SizedBox(height: 8),
               Text(

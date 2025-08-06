@@ -50,9 +50,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppTheme.primaryGradient,
-        ),
+        decoration: const BoxDecoration(gradient: AppTheme.primaryGradient),
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -60,7 +58,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Card(
                 elevation: 8,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppConstants.defaultBorderRadius),
+                  borderRadius: BorderRadius.circular(
+                    AppConstants.defaultBorderRadius,
+                  ),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
@@ -107,8 +107,9 @@ class _LoginPageState extends State<LoginPage> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
                             }
-                            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                                .hasMatch(value)) {
+                            if (!RegExp(
+                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                            ).hasMatch(value)) {
                               return 'Please enter a valid email';
                             }
                             return null;
@@ -125,9 +126,11 @@ class _LoginPageState extends State<LoginPage> {
                             hintText: 'Enter your password',
                             prefixIcon: const Icon(Icons.lock_outlined),
                             suffixIcon: IconButton(
-                              icon: Icon(_obscurePassword
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined),
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
                               onPressed: () {
                                 setState(() {
                                   _obscurePassword = !_obscurePassword;
@@ -151,15 +154,19 @@ class _LoginPageState extends State<LoginPage> {
                         Consumer<AuthProvider>(
                           builder: (context, authProvider, child) {
                             return ElevatedButton(
-                              onPressed: authProvider.isLoading ? null : _handleLogin,
+                              onPressed: authProvider.isLoading
+                                  ? null
+                                  : _handleLogin,
                               child: authProvider.isLoading
                                   ? const SizedBox(
                                       height: 20,
                                       width: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                            Colors.white),
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
                                       ),
                                     )
                                   : const Text('Sign In'),
@@ -173,14 +180,30 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () => context.go('/register'),
                           child: const Text("Don't have an account? Sign Up"),
                         ),
-                        
+
+                        // Continue as Guest Button
+                        OutlinedButton(
+                          onPressed: () {
+                            final authProvider = Provider.of<AuthProvider>(
+                              context,
+                              listen: false,
+                            );
+                            authProvider.continueAsGuest();
+                            context.go(AppConstants.homeRoute);
+                          },
+                          child: const Text('Continue as Guest'),
+                        ),
+                        const SizedBox(height: 8),
+
                         // Forgot Password Link
                         TextButton(
                           onPressed: () {
                             // TODO: Implement forgot password
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Forgot password feature coming soon!'),
+                                content: Text(
+                                  'Forgot password feature coming soon!',
+                                ),
                               ),
                             );
                           },

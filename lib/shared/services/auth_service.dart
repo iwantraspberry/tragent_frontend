@@ -5,7 +5,7 @@ import 'api_service.dart';
 
 class AuthService {
   final ApiService _apiService = ApiService();
-  
+
   // Get stored token
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -42,10 +42,10 @@ class AuthService {
       final response = await _apiService.login(email, password);
       final token = response['token'] as String;
       final userData = response['user'] as Map<String, dynamic>;
-      
+
       await _storeToken(token);
       await _storeUserId(userData['id'] as String);
-      
+
       return User.fromJson(userData);
     } catch (e) {
       throw Exception('Login failed: $e');
@@ -58,10 +58,10 @@ class AuthService {
       final response = await _apiService.register(email, password, name);
       final token = response['token'] as String;
       final userData = response['user'] as Map<String, dynamic>;
-      
+
       await _storeToken(token);
       await _storeUserId(userData['id'] as String);
-      
+
       return User.fromJson(userData);
     } catch (e) {
       throw Exception('Registration failed: $e');
@@ -73,7 +73,7 @@ class AuthService {
     try {
       final token = await getToken();
       if (token == null) return null;
-      
+
       return await _apiService.getUserProfile(token);
     } catch (e) {
       // If getting user fails, likely token is invalid

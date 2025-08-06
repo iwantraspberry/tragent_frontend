@@ -37,7 +37,8 @@ class _ChatPageState extends State<ChatPage> {
       _messages = [
         ChatMessage(
           id: '1',
-          content: 'Hello! I\'m your AI travel assistant. I can help you plan trips, find destinations, book activities, and answer travel questions. How can I assist you today?',
+          content:
+              'Hello! I\'m your AI travel assistant. I can help you plan trips, find destinations, book activities, and answer travel questions.\n\n💡 Tip: Sign in to save your conversation history and get personalized recommendations!\n\nHow can I assist you today?',
           type: MessageType.text,
           timestamp: DateTime.now().subtract(const Duration(minutes: 1)),
           isFromUser: false,
@@ -70,9 +71,9 @@ class _ChatPageState extends State<ChatPage> {
 
     // Simulate AI response
     await Future.delayed(const Duration(seconds: 2));
-    
+
     final aiResponse = _generateAIResponse(messageText);
-    
+
     setState(() {
       _messages.add(aiResponse);
       _isTyping = false;
@@ -83,22 +84,33 @@ class _ChatPageState extends State<ChatPage> {
 
   ChatMessage _generateAIResponse(String userMessage) {
     String response;
-    
+
     // Simple response logic based on keywords
     final lowerMessage = userMessage.toLowerCase();
-    
+
     if (lowerMessage.contains('hello') || lowerMessage.contains('hi')) {
-      response = 'Hello! Nice to meet you. I\'m here to help you plan amazing trips. What destination are you thinking about?';
-    } else if (lowerMessage.contains('tokyo') || lowerMessage.contains('japan')) {
-      response = 'Tokyo is an amazing destination! It offers a perfect blend of modern technology and traditional culture. Would you like me to suggest some must-visit places like Shibuya, Senso-ji Temple, or Tokyo Skytree?';
-    } else if (lowerMessage.contains('paris') || lowerMessage.contains('france')) {
-      response = 'Paris, the City of Light! It\'s perfect for art lovers, food enthusiasts, and romantics. I can help you plan visits to the Eiffel Tower, Louvre Museum, and charming neighborhoods like Montmartre.';
-    } else if (lowerMessage.contains('budget') || lowerMessage.contains('cost') || lowerMessage.contains('price')) {
-      response = 'I can help you plan a trip within your budget! Could you tell me your approximate budget range and preferred destination? I\'ll suggest cost-effective options for accommodation, activities, and dining.';
-    } else if (lowerMessage.contains('book') || lowerMessage.contains('reservation')) {
-      response = 'I can help you find the best booking options! While I can\'t directly make reservations, I can guide you to trusted booking platforms and suggest the best times to book for better prices.';
+      response =
+          'Hello! Nice to meet you. I\'m here to help you plan amazing trips. What destination are you thinking about?';
+    } else if (lowerMessage.contains('tokyo') ||
+        lowerMessage.contains('japan')) {
+      response =
+          'Tokyo is an amazing destination! It offers a perfect blend of modern technology and traditional culture. Would you like me to suggest some must-visit places like Shibuya, Senso-ji Temple, or Tokyo Skytree?';
+    } else if (lowerMessage.contains('paris') ||
+        lowerMessage.contains('france')) {
+      response =
+          'Paris, the City of Light! It\'s perfect for art lovers, food enthusiasts, and romantics. I can help you plan visits to the Eiffel Tower, Louvre Museum, and charming neighborhoods like Montmartre.';
+    } else if (lowerMessage.contains('budget') ||
+        lowerMessage.contains('cost') ||
+        lowerMessage.contains('price')) {
+      response =
+          'I can help you plan a trip within your budget! Could you tell me your approximate budget range and preferred destination? I\'ll suggest cost-effective options for accommodation, activities, and dining.';
+    } else if (lowerMessage.contains('book') ||
+        lowerMessage.contains('reservation')) {
+      response =
+          'I can help you find the best booking options! While I can\'t directly make reservations, I can guide you to trusted booking platforms and suggest the best times to book for better prices.';
     } else {
-      response = 'That\'s interesting! I\'d love to help you with your travel plans. Could you tell me more about what you\'re looking for? For example:\n\n• Destination preferences\n• Travel dates\n• Budget range\n• Type of activities you enjoy\n\nThis will help me provide better recommendations!';
+      response =
+          'That\'s interesting! I\'d love to help you with your travel plans. Could you tell me more about what you\'re looking for? For example:\n\n• Destination preferences\n• Travel dates\n• Budget range\n• Type of activities you enjoy\n\nThis will help me provide better recommendations!';
     }
 
     return ChatMessage(
@@ -143,7 +155,10 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 Text(
                   'Online',
-                  style: TextStyle(fontSize: 12, color: AppTheme.secondaryColor),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.secondaryColor,
+                  ),
                 ),
               ],
             ),
@@ -211,8 +226,9 @@ class _ChatPageState extends State<ChatPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
-        mainAxisAlignment:
-            message.isFromUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: message.isFromUser
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!message.isFromUser) ...[
@@ -274,8 +290,9 @@ class _ChatPageState extends State<ChatPage> {
               child: Consumer<AuthProvider>(
                 builder: (context, authProvider, child) {
                   return Text(
-                    (authProvider.user?.name != null && authProvider.user!.name.isNotEmpty 
-                        ? authProvider.user!.name.substring(0, 1).toUpperCase() 
+                    (authProvider.user?.name != null &&
+                            authProvider.user!.name.isNotEmpty
+                        ? authProvider.user!.name.substring(0, 1).toUpperCase()
                         : 'U'),
                     style: const TextStyle(
                       color: Colors.white,
@@ -306,9 +323,9 @@ class _ChatPageState extends State<ChatPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20).copyWith(
-                bottomLeft: const Radius.circular(4),
-              ),
+              borderRadius: BorderRadius.circular(
+                20,
+              ).copyWith(bottomLeft: const Radius.circular(4)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,

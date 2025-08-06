@@ -4,16 +4,19 @@ import '../services/auth_service.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
-  
+
   User? _user;
   bool _isLoading = false;
   String? _error;
+  bool _isGuestMode = false;
 
   // Getters
   User? get user => _user;
   bool get isLoading => _isLoading;
   String? get error => _error;
-  bool get isAuthenticated => _user != null;
+  bool get isAuthenticated => _user != null && !_isGuestMode;
+  bool get isGuestMode => _isGuestMode;
+  bool get isLoggedIn => _user != null;
 
   // Initialize auth state
   Future<void> initializeAuth() async {
@@ -22,13 +25,35 @@ class AuthProvider extends ChangeNotifier {
       final isLoggedIn = await _authService.isLoggedIn();
       if (isLoggedIn) {
         _user = await _authService.getCurrentUser();
+        _isGuestMode = false;
+      } else {
+        // Start in guest mode
+        _enableGuestMode();
       }
       _clearError();
     } catch (e) {
       _setError('Failed to initialize authentication: $e');
+      _enableGuestMode(); // Fallback to guest mode
     } finally {
       _setLoading(false);
     }
+  }
+
+  // Enable guest mode
+  void _enableGuestMode() {
+    _isGuestMode = true;
+    _user = User(
+      id: 'guest',
+      email: 'guest@example.com',
+      name: 'Guest User',
+      createdAt: DateTime.now(),
+    );
+    notifyListeners();
+  }
+
+  // Continue as guest
+  void continueAsGuest() {
+    _enableGuestMode();
   }
 
   // Login
@@ -36,6 +61,7 @@ class AuthProvider extends ChangeNotifier {
     _setLoading(true);
     try {
       _user = await _authService.login(email, password);
+      _isGuestMode = false;
       _clearError();
       notifyListeners();
       return true;
@@ -52,6 +78,7 @@ class AuthProvider extends ChangeNotifier {
     _setLoading(true);
     try {
       _user = await _authService.register(email, password, name);
+      _isGuestMode = false;
       _clearError();
       notifyListeners();
       return true;
@@ -67,8 +94,10 @@ class AuthProvider extends ChangeNotifier {
   Future<void> logout() async {
     _setLoading(true);
     try {
-      await _authService.logout();
-      _user = null;
+      if (!_isGuestMode) {
+        await _authService.logout();
+      }
+      _enableGuestMode(); // Switch back to guest mode
       _clearError();
     } catch (e) {
       _setError('Logout failed: $e');
@@ -80,8 +109,8 @@ class AuthProvider extends ChangeNotifier {
 
   // Refresh user data
   Future<void> refreshUser() async {
-    if (!isAuthenticated) return;
-    
+    if (!isLoggedIn || _isGuestMode) return;
+
     try {
       _user = await _authService.getCurrentUser();
       _clearError();

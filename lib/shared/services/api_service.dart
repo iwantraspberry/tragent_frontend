@@ -7,18 +7,18 @@ import '../../core/constants/app_constants.dart';
 
 class ApiService {
   static const String _baseUrl = AppConstants.apiBaseUrl;
-  
+
   // Headers
   Map<String, String> _getHeaders({String? token}) {
     final headers = <String, String>{
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
-    
+
     if (token != null) {
       headers['Authorization'] = 'Bearer $token';
     }
-    
+
     return headers;
   }
 
@@ -27,10 +27,7 @@ class ApiService {
     final response = await http.post(
       Uri.parse('$_baseUrl/auth/login'),
       headers: _getHeaders(),
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-      }),
+      body: jsonEncode({'email': email, 'password': password}),
     );
 
     if (response.statusCode == 200) {
@@ -40,15 +37,15 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> register(String email, String password, String name) async {
+  Future<Map<String, dynamic>> register(
+    String email,
+    String password,
+    String name,
+  ) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/auth/register'),
       headers: _getHeaders(),
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-        'name': name,
-      }),
+      body: jsonEncode({'email': email, 'password': password, 'name': name}),
     );
 
     if (response.statusCode == 201) {
@@ -87,7 +84,10 @@ class ApiService {
     }
   }
 
-  Future<TravelPlan> createTravelPlan(String token, Map<String, dynamic> planData) async {
+  Future<TravelPlan> createTravelPlan(
+    String token,
+    Map<String, dynamic> planData,
+  ) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/travel/plans'),
       headers: _getHeaders(token: token),
@@ -131,14 +131,15 @@ class ApiService {
   }
 
   // Chat
-  Future<ChatMessage> sendChatMessage(String token, String sessionId, String message) async {
+  Future<ChatMessage> sendChatMessage(
+    String token,
+    String sessionId,
+    String message,
+  ) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/chat/sessions/$sessionId/messages'),
       headers: _getHeaders(token: token),
-      body: jsonEncode({
-        'content': message,
-        'type': 'text',
-      }),
+      body: jsonEncode({'content': message, 'type': 'text'}),
     );
 
     if (response.statusCode == 201) {
@@ -166,9 +167,7 @@ class ApiService {
     final response = await http.post(
       Uri.parse('$_baseUrl/chat/sessions'),
       headers: _getHeaders(token: token),
-      body: jsonEncode({
-        'title': title,
-      }),
+      body: jsonEncode({'title': title}),
     );
 
     if (response.statusCode == 201) {

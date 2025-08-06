@@ -6,10 +6,7 @@ import '../core/theme/app_theme.dart';
 class MainNavigation extends StatelessWidget {
   final Widget child;
 
-  const MainNavigation({
-    super.key,
-    required this.child,
-  });
+  const MainNavigation({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +18,7 @@ class MainNavigation extends StatelessWidget {
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     final currentLocation = GoRouterState.of(context).fullPath;
-    
+
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       backgroundColor: Colors.white,
@@ -57,12 +54,12 @@ class MainNavigation extends StatelessWidget {
 
   int _getCurrentIndex(String? location) {
     if (location == null) return 0;
-    
+
     if (location.startsWith(AppConstants.homeRoute)) return 0;
     if (location.startsWith(AppConstants.chatRoute)) return 1;
     if (location.startsWith(AppConstants.travelRoute)) return 2;
     if (location.startsWith(AppConstants.profileRoute)) return 3;
-    
+
     return 0;
   }
 

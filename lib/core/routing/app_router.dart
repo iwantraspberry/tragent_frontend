@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/login_page.dart';
 import '../../features/auth/presentation/register_page.dart';
 import '../../features/chat/presentation/chat_page.dart';
+import '../../features/home/presentation/home_page.dart';
 import '../../features/travel/presentation/travel_home_page.dart';
 import '../../features/profile/presentation/profile_page.dart';
 import '../constants/app_constants.dart';
@@ -19,7 +19,7 @@ class AppRouter {
         name: 'splash',
         builder: (context, state) => const SplashPage(),
       ),
-      
+
       // Authentication routes
       GoRoute(
         path: AppConstants.loginRoute,
@@ -31,7 +31,7 @@ class AppRouter {
         name: 'register',
         builder: (context, state) => const RegisterPage(),
       ),
-      
+
       // Main app with bottom navigation
       ShellRoute(
         builder: (context, state, child) => MainNavigation(child: child),
@@ -39,7 +39,7 @@ class AppRouter {
           GoRoute(
             path: AppConstants.homeRoute,
             name: 'home',
-            builder: (context, state) => const TravelHomePage(),
+            builder: (context, state) => const HomePage(),
           ),
           GoRoute(
             path: AppConstants.chatRoute,
@@ -59,12 +59,10 @@ class AppRouter {
         ],
       ),
     ],
-    
-    // Redirect logic for authentication
-    redirect: (context, state) {
-      // This is a simplified redirect logic
-      // In a real app, you'd check authentication state here
-      return null;
-    },
+
+    // No authentication redirect needed since guest mode is available
+    // redirect: (context, state) {
+    //   return null;
+    // },
   );
 }

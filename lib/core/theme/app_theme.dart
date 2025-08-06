@@ -10,14 +10,14 @@ class AppTheme {
   static const Color errorColor = Color(0xFFF44336);
   static const Color textPrimaryColor = Color(0xFF212121);
   static const Color textSecondaryColor = Color(0xFF757575);
-  
+
   // Gradients
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [Color(0xFF2196F3), Color(0xFF21CBF3)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-  
+
   static const LinearGradient cardGradient = LinearGradient(
     colors: [Color(0xFFFFFFFF), Color(0xFFF8F9FA)],
     begin: Alignment.topCenter,
